@@ -2,12 +2,10 @@
 #include <pthread.h>
 #include <semaphore.h>
 
-// Semaphores for pen, paper, and question paper
 sem_t pen_semaphore;
 sem_t paper_semaphore;
 sem_t question_paper_semaphore;
 
-// Semaphore for assignment synchronization
 sem_t assignment_semaphore;
 
 void *student(void *name);
@@ -16,26 +14,21 @@ void teacher(void);
 int main() {
     pthread_t student1_thread, student2_thread, student3_thread, teacher_thread;
 
-    // Initialize semaphores
     sem_init(&pen_semaphore, 0, 1);
     sem_init(&paper_semaphore, 0, 1);
     sem_init(&question_paper_semaphore, 0, 1);
     sem_init(&assignment_semaphore, 0, 1);
 
-    // Start threads
     pthread_create(&student1_thread, NULL, student, (void *)"Student 1");
     pthread_create(&student2_thread, NULL, student, (void *)"Student 2");
     pthread_create(&student3_thread, NULL, student, (void *)"Student 3");
-    pthread_create(&teacher_thread, NULL, (void *)teacher, NULL);
+    pthread_create(&teacher_thread, NULL, (void *)teacher);
 
-
-    // Wait for all threads to finish
     pthread_join(student1_thread, NULL);
     pthread_join(student2_thread, NULL);
     pthread_join(student3_thread, NULL);
     pthread_join(teacher_thread, NULL);
 
-    // Destroy semaphores
     sem_destroy(&pen_semaphore);
     sem_destroy(&paper_semaphore);
     sem_destroy(&question_paper_semaphore);
